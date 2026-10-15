@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sekolah Cerdas Digital — Cerdas Gurunya, Digital Pembelajarannya, Siap Generasinya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        navy: { 900: '#0a1628', 800: '#0f2044', 700: '#152d5e', 600: '#1e3a5f' },
+                        brand: { blue: '#2563eb', bright: '#3b82f6', light: '#60a5fa', cyan: '#06b6d4', purple: '#7c3aed', lavender: '#a78bfa' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f8fafc; color: #1e293b; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #3b82f6, #06b6d4); border-radius: 10px; }
+
+        .nav-scrolled { background: rgba(10, 22, 40, 0.95) !important; backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0,0,0,0.2); }
+        .nav-link { position: relative; transition: color 0.3s; }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: linear-gradient(90deg, #06b6d4, #3b82f6); border-radius: 2px; transition: width 0.3s; }
+        .nav-link.active { color: #22d3ee; }
+        .nav-link.active::after, .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: #22d3ee; }
+
+        .hero-bg { background: linear-gradient(135deg, #0a1628 0%, #0f2044 30%, #152d5e 60%, #1e3a5f 100%); position: relative; overflow: hidden; }
+        .hero-bg::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at 30% 50%, rgba(6,182,212,0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(124,58,237,0.06) 0%, transparent 50%); }
+        #heroCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+        .float-card { backdrop-filter: blur(16px); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); animation: floatCard 6s ease-in-out infinite; }
+        .float-card:nth-child(2) { animation-delay: -2s; }
+        .float-card:nth-child(3) { animation-delay: -4s; }
+        @keyframes floatCard { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        .card-hover { transition: transform 0.4s ease, box-shadow 0.4s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15); }
+
+        .focus-card { position: relative; overflow: hidden; }
+        .focus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .focus-card-1::before { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+        .focus-card-2::before { background: linear-gradient(90deg, #06b6d4, #10b981); }
+        .focus-card-3::before { background: linear-gradient(90deg, #7c3aed, #ec4899); }
+
+        .timeline-line { position: absolute; left: 24px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #3b82f6, #06b6d4, #7c3aed); border-radius: 3px; }
+        .timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #06b6d4); border: 3px solid #fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); position: relative; z-index: 2; transition: transform 0.3s, box-shadow 0.3s; }
+        .timeline-item:hover .timeline-dot { transform: scale(1.3); box-shadow: 0 0 0 6px rgba(59,130,246,0.3); }
+
+        .faq-item { border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
+        .faq-item.active { border-color: #3b82f6; box-shadow: 0 4px 20px rgba(59,130,246,0.1); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+        .faq-item.active .faq-answer { max-height: 300px; }
+        .faq-icon { transition: transform 0.3s; }
+        .faq-item.active .faq-icon { transform: rotate(45deg); }
+
+        /* ===== TEAM SECTION — UPDATED ===== */
+        .team-card { position: relative; overflow: hidden; }
+        .team-card::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px; background: linear-gradient(135deg, transparent, transparent); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; transition: background 0.5s; pointer-events: none; }
+        .team-card:hover::before { background: linear-gradient(135deg, #3b82f6, #06b6d4, #7c3aed); }
+
+        .team-photo-ring {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2), 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+        }
+        .team-card:hover .team-photo-ring {
+            transform: scale(1.06);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3), 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .team-photo-ring img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 22%;
+            display: block;
+            border: 3px solid #ffffff;
+        }
+
+        .stat-card { position: relative; }
+        .stat-card::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(6,182,212,0.3), rgba(124,58,237,0.3)); z-index: -1; opacity: 0; transition: opacity 0.4s; }
+        .stat-card:hover::after { opacity: 1; }
+
+        .ct-card { position: relative; overflow: hidden; }
+        .ct-card .ct-number { font-size: 80px; font-weight: 900; position: absolute; top: -10px; right: -5px; opacity: 0.05; color: #3b82f6; line-height: 1; }
+
+        .workflow-step { position: relative; }
+        .workflow-step:not(:last-child)::after { content: ''; position: absolute; right: -16px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 12px solid #3b82f6; }
+
+        @media (max-width: 768px) {
+            .workflow-step:not(:last-child)::after { display: none; }
+        }
+
+        .section-alt { background: linear-gradient(180deg, #f0f5ff 0%, #f8fafc 100%); }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .gradient-text-purple { background: linear-gradient(135deg, #7c3aed, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .game-card { cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .game-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(6,182,212,0.1)); opacity: 0; transition: opacity 0.3s; }
+        .game-card:hover::before { opacity: 1; }
+        .game-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 16px 40px rgba(59,130,246,0.2); border-color: #3b82f6; }
+
+        .output-card { border: 2px dashed #cbd5e1; transition: all 0.3s; cursor: pointer; }
+        .output-card:hover { border-color: #3b82f6; background: rgba(59,130,246,0.03); }
+        .output-card .upload-zone { transition: all 0.3s; }
+        .output-card:hover .upload-zone { color: #3b82f6; }
+
+        .cta-bg { background: linear-gradient(135deg, #0a1628 0%, #152d5e 40%, #1e3a5f 70%, #0f2044 100%); position: relative; overflow: hidden; }
+        .cta-bg::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(6,182,212,0.15), transparent 70%); }
+        .cta-bg::after { content: ''; position: absolute; bottom: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%); }
+
+        .back-to-top { opacity: 0; visibility: hidden; transition: all 0.4s; }
+        .back-to-top.show { opacity: 1; visibility: visible; }
+
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
+
+        .badge-pulse { animation: badgePulse 3s ease-in-out infinite; }
+        @keyframes badgePulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(6,182,212,0.4); } 50% { box-shadow: 0 0 0 8px rgba(6,182,212,0); } }
+    </style>
+</head>
+<body>
+
+<!-- ========== NAVIGATION ========== -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" style="background: transparent;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 lg:h-20">
+            <a href="#hero" class="flex items-center gap-2 group">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-blue to-brand-cyan flex items-center justify-center">
+                    <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+                </div>
+                <span class="text-white font-bold text-sm lg:text-base tracking-tight hidden sm:block">SCD<span class="text-brand-cyan">.</span></span>
+            </a>
+            <div class="hidden lg:flex items-center gap-1">
+                <a href="#tentang" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Tentang</a>
+                <a href="#penting" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Mengapa Penting</a>
+                <a href="#fokus" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Fokus Program</a>
+                <a href="#platform" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Platform</a>
+                <a href="#tahapan" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Tahapan</a>
+                <a href="#coding" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Coding</a>
+                <a href="#luaran" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Luaran</a>
+                <a href="#manfaat" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Manfaat</a>
+                <a href="#tim" class="nav-link text-white/80 text-sm font-medium px-3 py-2">Tim</a>
+                <a href="#faq" class="nav-link text-white/80 text-sm font-medium px-3 py-2">FAQ</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="#tentang" class="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-brand-blue to-brand-cyan text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-brand-blue/25 transition-all duration-300 hover:scale-105">
+                    Jelajahi Program
+                </a>
+                <button id="mobileMenuBtn" class="lg:hidden text-white p-2">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-menu fixed inset-y-0 right-0 w-72 bg-navy-900/98 backdrop-blur-xl z-[60] p-6 flex flex-col">
+    <div class="flex justify-between items-center mb-8">
+        <span class="text-white font-bold text-lg">Menu</span>
+        <button id="mobileMenuClose" class="text-white/70 hover:text-white p-1">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+    </div>
+    <div class="flex flex-col gap-1">
+        <a href="#tentang" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Tentang</a>
+        <a href="#penting" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Mengapa Penting</a>
+        <a href="#fokus" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Fokus Program</a>
+        <a href="#platform" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Platform</a>
+        <a href="#tahapan" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Tahapan</a>
+        <a href="#coding" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Coding</a>
+        <a href="#luaran" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Luaran</a>
+        <a href="#manfaat" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Manfaat</a>
+        <a href="#tim" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">Tim</a>
+        <a href="#faq" class="mobile-link text-white/80 hover:text-brand-cyan text-base font-medium py-3 px-3 rounded-xl hover:bg-white/5 transition-all">FAQ</a>
+    </div>
+    <div class="mt-auto">
+        <a href="#tentang" class="mobile-link flex items-center justify-center gap-2 bg-gradient-to-r from-brand-blue to-brand-cyan text-white font-semibold py-3 rounded-full">
+            Jelajahi Program <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+    </div>
+</div>
+<div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
+
+<!-- ========== SECTION 1 — HERO ========== -->
+<section id="hero" class="hero-bg min-h-screen flex items-center relative">
+    <canvas id="heroCanvas"></canvas>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 relative z-10 w-full">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+            <div class="text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 text-brand-cyan text-xs font-semibold px-4 py-2 rounded-full mb-6 badge-pulse">
+                    <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                    PROJEK KEPEMIMPINAN PPG CAGUR 2026
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
+                    SEKOLAH<br>
+                    <span class="gradient-text">CERDAS</span><br>
+                    DIGITAL
+                </h1>
+                <p class="text-lg sm:text-xl text-brand-cyan font-medium mb-4 italic">
+                    "Cerdas Gurunya, Digital Pembelajarannya, Siap Generasinya."
+                </p>
+                <p class="text-white/70 text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8">
+                    Program penguatan kompetensi digital guru melalui pemanfaatan teknologi pembelajaran, praktik pembuatan media digital, serta pengenalan coding dan computational thinking untuk pembelajaran sekolah dasar.
+                </p>
+                <div class="flex items-center gap-3 text-white/60 text-sm mb-8 justify-center lg:justify-start">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-brand-cyan"></i>
+                    SD Negeri 49 Kota Ternate
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                    <a href="#tentang" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-brand-blue to-brand-cyan text-white font-semibold px-8 py-3.5 rounded-full hover:shadow-xl hover:shadow-brand-blue/30 transition-all duration-300 hover:scale-105 text-sm">
+                        Jelajahi Program <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-illustration hidden lg:flex justify-center items-center relative">
+                <div class="float-card absolute -top-4 -left-4 px-5 py-3 rounded-2xl text-white z-10">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-brand-blue/40 flex items-center justify-center"><i data-lucide="monitor-play" class="w-4 h-4 text-brand-cyan"></i></div>
+                        <span class="text-sm font-semibold">Digital Teaching</span>
+                    </div>
+                </div>
+                <div class="float-card absolute top-1/3 -right-8 px-5 py-3 rounded-2xl text-white z-10">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/30 flex items-center justify-center"><i data-lucide="palette" class="w-4 h-4 text-emerald-400"></i></div>
+                        <span class="text-sm font-semibold">Digital Creativity</span>
+                    </div>
+                </div>
+                <div class="float-card absolute -bottom-2 left-8 px-5 py-3 rounded-2xl text-white z-10">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-brand-purple/30 flex items-center justify-center"><i data-lucide="rocket" class="w-4 h-4 text-brand-lavender"></i></div>
+                        <span class="text-sm font-semibold">Future Learning</span>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="w-80 h-80 rounded-[40px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/10 flex flex-col items-center justify-center gap-6 p-8">
+                        <div class="relative">
+                            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-brand-bright to-brand-cyan flex items-center justify-center shadow-lg shadow-brand-blue/30">
+                                <i data-lucide="user-check" class="w-10 h-10 text-white"></i>
+                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center border-2 border-navy-900">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>
+                            </div>
+                        </div>
+                        <div class="w-48 h-28 bg-navy-800 rounded-lg border-2 border-slate-600 relative overflow-hidden">
+                            <div class="absolute inset-2 bg-gradient-to-br from-blue-600/80 via-cyan-500/60 to-purple-600/80 rounded flex items-center justify-center">
+                                <div class="grid grid-cols-3 gap-1.5 p-2">
+                                    <div class="w-8 h-6 rounded bg-white/20"></div>
+                                    <div class="w-8 h-6 rounded bg-white/15"></div>
+                                    <div class="w-8 h-6 rounded bg-white/20"></div>
+                                    <div class="w-8 h-6 rounded bg-white/15"></div>
+                                    <div class="w-8 h-6 rounded bg-white/20"></div>
+                                    <div class="w-8 h-6 rounded bg-white/15"></div>
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-2 left-4 right-4 h-3 bg-slate-600 rounded-b-md"></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center"><i data-lucide="smile" class="w-5 h-5 text-white"></i></div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center"><i data-lucide="smile" class="w-5 h-5 text-white"></i></div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center"><i data-lucide="smile" class="w-5 h-5 text-white"></i></div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center"><i data-lucide="smile" class="w-5 h-5 text-white"></i></div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-6 right-10 w-12 h-12 rounded-xl bg-brand-purple/20 border border-brand-purple/30 flex items-center justify-center animate-bounce" style="animation-duration:3s">
+                        <i data-lucide="code-2" class="w-6 h-6 text-brand-lavender"></i>
+                    </div>
+                    <div class="absolute top-16 -left-10 w-10 h-10 rounded-lg bg-brand-cyan/20 border border-brand-cyan/30 flex items-center justify-center animate-bounce" style="animation-duration:4s;animation-delay:1s">
+                        <i data-lucide="brain" class="w-5 h-5 text-brand-cyan"></i>
+                    </div>
+                    <div class="absolute bottom-20 -right-8 w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center animate-bounce" style="animation-duration:3.5s;animation-delay:0.5s">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 animate-bounce">
+        <span class="text-white/40 text-xs tracking-widest uppercase">Scroll</span>
+        <i data-lucide="chevron-down" class="w-5 h-5 text-white/40"></i>
+    </div>
+</section>
+
+<!-- ========== SECTION 2 — TENTANG PROGRAM ========== -->
+<section id="tentang" class="py-24 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                    <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                    TENTANG PROGRAM
+                </div>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight mb-6">
+                    Apa Itu <span class="gradient-text">Sekolah Cerdas Digital</span>?
+                </h2>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    Sekolah Cerdas Digital merupakan program yang dirancang untuk meningkatkan kompetensi dan kesiapan digital guru dalam memanfaatkan teknologi untuk mendukung pembelajaran yang inovatif, interaktif, dan relevan dengan kebutuhan peserta didik masa kini.
+                </p>
+                <p class="text-slate-600 leading-relaxed">
+                    Program ini tidak hanya mengenalkan teknologi, tetapi juga memberikan pengalaman praktik langsung dalam menghasilkan produk pembelajaran digital serta pengenalan coding dan computational thinking.
+                </p>
+            </div>
+            <div class="reveal reveal-delay-2">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="stat-card bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 text-center card-hover">
+                        <div class="text-4xl lg:text-5xl font-extrabold gradient-text counter" data-target="8">0</div>
+                        <div class="text-sm font-medium text-slate-600 mt-2">Minggu Program</div>
+                    </div>
+                    <div class="stat-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 text-center card-hover">
+                        <div class="text-4xl lg:text-5xl font-extrabold gradient-text-purple counter" data-target="3">0</div>
+                        <div class="text-sm font-medium text-slate-600 mt-2">Fokus Utama</div>
+                    </div>
+                    <div class="stat-card bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 text-center card-hover">
+                        <div class="text-4xl lg:text-5xl font-extrabold text-emerald-600 counter" data-target="1">0</div>
+                        <div class="text-sm font-medium text-slate-600 mt-2">Produk Digital Minimal</div>
+                    </div>
+                    <div class="stat-card bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 text-center card-hover">
+                        <div class="text-4xl lg:text-5xl font-extrabold text-amber-600 counter" data-target="6">0</div>
+                        <div class="text-sm font-medium text-slate-600 mt-2">Tahapan Kegiatan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 3 — MENGAPA PENTING ========== -->
+<section id="penting" class="py-24 lg:py-32 section-alt">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                LATAR BELAKANG
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight">
+                Transformasi Pendidikan<br><span class="gradient-text">Dimulai dari Guru</span>
+            </h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="reveal reveal-delay-1 bg-white rounded-2xl p-7 card-hover border border-slate-100">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
+                    <i data-lucide="book-open" class="w-7 h-7 text-white"></i>
+                </div>
+                <h3 class="text-lg font-bold text-navy-900 mb-3">Literasi Digital Guru</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Belum semua guru memiliki pemahaman yang memadai tentang aplikasi dan website pembelajaran.</p>
+            </div>
+            <div class="reveal reveal-delay-2 bg-white rounded-2xl p-7 card-hover border border-slate-100">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center mb-5 shadow-lg shadow-cyan-500/20">
+                    <i data-lucide="settings" class="w-7 h-7 text-white"></i>
+                </div>
+                <h3 class="text-lg font-bold text-navy-900 mb-3">Pemanfaatan Teknologi</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Penggunaan teknologi digital dalam pembelajaran masih perlu ditingkatkan dari sisi frekuensi dan variasinya.</p>
+            </div>
+            <div class="reveal reveal-delay-3 bg-white rounded-2xl p-7 card-hover border border-slate-100">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-500/20">
+                    <i data-lucide="hand" class="w-7 h-7 text-white"></i>
+                </div>
+                <h3 class="text-lg font-bold text-navy-900 mb-3">Praktik Langsung</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Guru membutuhkan pengalaman hands-on dalam membuat media dan aktivitas pembelajaran digital.</p>
+            </div>
+            <div class="reveal reveal-delay-4 bg-white rounded-2xl p-7 card-hover border border-slate-100">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mb-5 shadow-lg shadow-amber-500/20">
+                    <i data-lucide="zap" class="w-7 h-7 text-white"></i>
+                </div>
+                <h3 class="text-lg font-bold text-navy-900 mb-3">Kesiapan Masa Depan</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Guru perlu mengenal coding dan computational thinking sebagai bagian dari kesiapan pembelajaran masa depan.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 4 — TIGA FOKUS UTAMA ========== -->
+<section id="fokus" class="py-24 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="target" class="w-3.5 h-3.5"></i>
+                FOKUS PROGRAM
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight mb-4">
+                Tiga Langkah Menuju<br><span class="gradient-text">Sekolah Cerdas Digital</span>
+            </h2>
+            <div class="flex items-center justify-center gap-3 mt-8 flex-wrap">
+                <span class="bg-blue-100 text-blue-700 font-semibold text-sm px-5 py-2 rounded-full">Learn</span>
+                <i data-lucide="arrow-right" class="w-5 h-5 text-blue-400 hidden sm:block"></i>
+                <span class="bg-cyan-100 text-cyan-700 font-semibold text-sm px-5 py-2 rounded-full">Create</span>
+                <i data-lucide="arrow-right" class="w-5 h-5 text-cyan-400 hidden sm:block"></i>
+                <span class="bg-purple-100 text-purple-700 font-semibold text-sm px-5 py-2 rounded-full">Innovate</span>
+            </div>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-8">
+            <div class="reveal reveal-delay-1 focus-card focus-card-1 bg-white rounded-3xl p-8 lg:p-10 card-hover border border-slate-100 shadow-sm">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/25">
+                    <i data-lucide="monitor-play" class="w-8 h-8 text-white"></i>
+                </div>
+                <div class="text-xs font-bold text-blue-500 tracking-widest uppercase mb-3">Fokus 01</div>
+                <h3 class="text-2xl font-bold text-navy-900 mb-4">Digital Teaching</h3>
+                <p class="text-slate-500 leading-relaxed">Pengenalan aplikasi dan website pendukung pembelajaran, mulai dari pembuatan media, presentasi, kuis, asesmen, bahan ajar, hingga aktivitas interaktif.</p>
+                <div class="mt-6 flex flex-wrap gap-2">
+                    <span class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">Aplikasi</span>
+                    <span class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">Website</span>
+                    <span class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">Interaktif</span>
+                </div>
+            </div>
+            <div class="reveal reveal-delay-2 focus-card focus-card-2 bg-white rounded-3xl p-8 lg:p-10 card-hover border border-slate-100 shadow-sm">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/25">
+                    <i data-lucide="palette" class="w-8 h-8 text-white"></i>
+                </div>
+                <div class="text-xs font-bold text-emerald-500 tracking-widest uppercase mb-3">Fokus 02</div>
+                <h3 class="text-2xl font-bold text-navy-900 mb-4">Digital Creativity</h3>
+                <p class="text-slate-500 leading-relaxed">Praktik langsung membuat media pembelajaran, bahan ajar, dan asesmen digital yang siap digunakan dalam pembelajaran di kelas.</p>
+                <div class="mt-6 flex flex-wrap gap-2">
+                    <span class="text-xs bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full font-medium">Media Digital</span>
+                    <span class="text-xs bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full font-medium">Bahan Ajar</span>
+                    <span class="text-xs bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full font-medium">Praktik</span>
+                </div>
+            </div>
+            <div class="reveal reveal-delay-3 focus-card focus-card-3 bg-white rounded-3xl p-8 lg:p-10 card-hover border border-slate-100 shadow-sm">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6 shadow-lg shadow-purple-500/25">
+                    <i data-lucide="rocket" class="w-8 h-8 text-white"></i>
+                </div>
+                <div class="text-xs font-bold text-purple-500 tracking-widest uppercase mb-3">Fokus 03</div>
+                <h3 class="text-2xl font-bold text-navy-900 mb-4">Future Learning</h3>
+                <p class="text-slate-500 leading-relaxed">Pengenalan coding dan computational thinking untuk sekolah dasar sebagai bekal menghadapi perkembangan pembelajaran masa depan.</p>
+                <div class="mt-6 flex flex-wrap gap-2">
+                    <span class="text-xs bg-purple-50 text-purple-600 px-3 py-1 rounded-full font-medium">Coding</span>
+                    <span class="text-xs bg-purple-50 text-purple-600 px-3 py-1 rounded-full font-medium">CT</span>
+                    <span class="text-xs bg-purple-50 text-purple-600 px-3 py-1 rounded-full font-medium">Masa Depan</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 5 — PLATFORM ========== -->
+<section id="platform" class="py-24 lg:py-32 section-alt">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+                PLATFORM
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight">
+                Eksplorasi <span class="gradient-text">Teknologi Pembelajaran</span>
+            </h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <div class="reveal reveal-delay-1 bg-white rounded-3xl p-8 card-hover border border-slate-100 shadow-sm">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
+                    <i data-lucide="clipboard-check" class="w-7 h-7 text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy-900 mb-3">Absen Digital</h3>
+                <p class="text-slate-500 text-sm leading-relaxed mb-5">Platform untuk pengelolaan absensi peserta didik secara digital.</p>
+                <div class="flex flex-col gap-2">
+                    <a href="https://docs.google.com/document/d/1FKiSplFMjz1bavv72Q1NmhUz4JSoXTau/edit?usp=drive_link&ouid=111318883795799773759&rtpof=true&sd=true" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-brand-blue hover:text-brand-cyan transition-colors">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Web dan APK Pendukung
+                    </a>
+                    <a href="https://youtu.be/ULwFfgUUrIU?si=k8Ha6WqZ1ATBPpPd" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-brand-blue hover:text-brand-cyan transition-colors">
+                        <i data-lucide="play-circle" class="w-4 h-4"></i> Video Tutorial
+                    </a>
+                    <a href="https://docs.google.com/document/d/1N87Hmak8VtC4rrLxCrlQ9UdQo0O__siW/edit?usp=drive_link&ouid=111318883795799773759&rtpof=true&sd=true" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-brand-blue hover:text-brand-cyan transition-colors">
+                        <i data-lucide="book" class="w-4 h-4"></i> Panduan Manual
+                    </a>
+                </div>
+            </div>
+            <div class="reveal reveal-delay-2 bg-white rounded-3xl p-8 card-hover border border-slate-100 shadow-sm">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-500/20">
+                    <i data-lucide="brain" class="w-7 h-7 text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy-900 mb-3">Perangkat Ajar Berbantuan AI</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Pemanfaatan kecerdasan buatan untuk membantu guru dalam membuat perangkat pembelajaran.</p>
+                <div class="mt-5 inline-flex items-center gap-2 bg-purple-50 text-purple-600 text-xs font-medium px-3 py-1.5 rounded-full">
+                    <i data-lucide="sparkles" class="w-3 h-3"></i> Diperkenalkan saat sesi pelatihan
+                </div>
+            </div>
+            <div class="reveal reveal-delay-3 bg-white rounded-3xl p-8 card-hover border border-slate-100 shadow-sm">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mb-5 shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="gamepad-2" class="w-7 h-7 text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy-900 mb-3">Game Edukasi</h3>
+                <p class="text-slate-500 text-sm leading-relaxed mb-5">Kumpulan permainan edukatif interaktif untuk mendukung pembelajaran.</p>
+                <div class="flex flex-col gap-2">
+                    <a href="https://game.afifedu.com/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 hover:text-emerald-500 transition-colors">
+                        <i data-lucide="external-link" class="w-4 h-4"></i> Permainan Tarik Tambang
+                    </a>
+                    <a href="https://educatech.id/dashboard/#koleksi" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 hover:text-emerald-500 transition-colors">
+                        <i data-lucide="external-link" class="w-4 h-4"></i> Kumpulan Game Interaktif
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="reveal bg-white rounded-3xl p-8 lg:p-10 border border-slate-100 shadow-sm">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
+                    <i data-lucide="gamepad-2" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-navy-900">Game Edukasi Interaktif</h3>
+                    <p class="text-xs text-slate-400">Klik untuk membuka game</p>
+                </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <a href="https://game.afifedu.com/" target="_blank" rel="noopener" class="game-card bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100 flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
+                        <i data-lucide="swords" class="w-7 h-7 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-navy-900 text-base">Permainan Tarik Tambang</div>
+                        <div class="text-xs text-slate-500 mt-0.5">game.afifedu.com</div>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-blue-400 ml-auto flex-shrink-0"></i>
+                </a>
+                <a href="https://educatech.id/dashboard/#koleksi" target="_blank" rel="noopener" class="game-card bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100 flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                        <i data-lucide="layout-grid" class="w-7 h-7 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-navy-900 text-base">Kumpulan Game Interaktif</div>
+                        <div class="text-xs text-slate-500 mt-0.5">educatech.id</div>
+                    </div>
+                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-emerald-400 ml-auto flex-shrink-0"></i>
+                </a>
+            </div>
+        </div>
+        <p class="text-center text-slate-400 text-xs mt-8 reveal">
+            Platform diperkenalkan dan dipraktikkan sesuai kebutuhan pembelajaran serta fasilitas yang tersedia di sekolah mitra. Program ini tidak berafiliasi sebagai sponsor atau mitra resmi dari platform-platform tersebut.
+        </p>
+    </div>
+</section>
+
+<!-- ========== SECTION 6 — METODE PRAKTIK ========== -->
+<section id="tahapan" class="py-24 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="wrench" class="w-3.5 h-3.5"></i>
+                METODE & TAHAPAN
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight">
+                Belajar dengan Praktik,<br><span class="gradient-text">Berkarya dengan Teknologi</span>
+            </h2>
+        </div>
+        <div class="reveal mb-20">
+            <div class="flex flex-wrap justify-center items-center gap-4 lg:gap-0">
+                <div class="workflow-step bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl px-6 py-4 text-center max-w-[160px]">
+                    <i data-lucide="search" class="w-6 h-6 mx-auto mb-2"></i>
+                    <div class="text-sm font-semibold">Pilih Aplikasi</div>
+                </div>
+                <div class="workflow-step bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-2xl px-6 py-4 text-center max-w-[160px]">
+                    <i data-lucide="pencil" class="w-6 h-6 mx-auto mb-2"></i>
+                    <div class="text-sm font-semibold">Buat Produk</div>
+                </div>
+                <div class="workflow-step bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-2xl px-6 py-4 text-center max-w-[160px]">
+                    <i data-lucide="play" class="w-6 h-6 mx-auto mb-2"></i>
+                    <div class="text-sm font-semibold">Praktikkan</div>
+                </div>
+                <div class="workflow-step bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-2xl px-6 py-4 text-center max-w-[160px]">
+                    <i data-lucide="message-circle" class="w-6 h-6 mx-auto mb-2"></i>
+                    <div class="text-sm font-semibold">Dapatkan Feedback</div>
+                </div>
+                <div class="workflow-step bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl px-6 py-4 text-center max-w-[160px]">
+                    <i data-lucide="check-circle" class="w-6 h-6 mx-auto mb-2"></i>
+                    <div class="text-sm font-semibold">Terapkan di Kelas</div>
+                </div>
+            </div>
+            <p class="text-center text-slate-500 text-sm mt-8 max-w-2xl mx-auto">
+                Program menggunakan pendekatan pembelajaran orang dewasa yang kontekstual, berbasis pengalaman, dan berorientasi pada praktik langsung.
+            </p>
+        </div>
+        <div class="reveal">
+            <h3 class="text-2xl font-bold text-navy-900 text-center mb-12">Tahapan Kegiatan <span class="gradient-text">8 Minggu</span></h3>
+            <div class="relative max-w-3xl mx-auto">
+                <div class="timeline-line hidden sm:block"></div>
+                <div class="timeline-item flex gap-6 mb-10 reveal">
+                    <div class="flex-shrink-0 mt-1.5 hidden sm:block"><div class="timeline-dot"></div></div>
+                    <div class="bg-gradient-to-r from-blue-50 to-white rounded-2xl p-6 border border-blue-100 flex-1 card-hover">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Minggu 1</span>
+                            <h4 class="font-bold text-navy-900">Pengenalan & Asesmen Kebutuhan</h4>
+                        </div>
+                        <p class="text-slate-500 text-sm">Identifikasi kebutuhan guru, sosialisasi program, dan pemetaan kompetensi digital awal.</p>
+                    </div>
+                </div>
+                <div class="timeline-item flex gap-6 mb-10 reveal">
+                    <div class="flex-shrink-0 mt-1.5 hidden sm:block"><div class="timeline-dot"></div></div>
+                    <div class="bg-gradient-to-r from-cyan-50 to-white rounded-2xl p-6 border border-cyan-100 flex-1 card-hover">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-cyan-100 text-cyan-700 text-xs font-bold px-3 py-1 rounded-full">Minggu 2–3</span>
+                            <h4 class="font-bold text-navy-900">Digital Teaching</h4>
+                        </div>
+                        <p class="text-slate-500 text-sm">Pengenalan aplikasi dan website pembelajaran: absensi digital, media presentasi, kuis interaktif, dan asesmen.</p>
+                    </div>
+                </div>
+                <div class="timeline-item flex gap-6 mb-10 reveal">
+                    <div class="flex-shrink-0 mt-1.5 hidden sm:block"><div class="timeline-dot"></div></div>
+                    <div class="bg-gradient-to-r from-emerald-50 to-white rounded-2xl p-6 border border-emerald-100 flex-1 card-hover">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full">Minggu 4–5</span>
+                            <h4 class="font-bold text-navy-900">Digital Creativity</h4>
+                        </div>
+                        <p class="text-slate-500 text-sm">Praktik langsung membuat media pembelajaran, bahan ajar digital, dan perangkat asesmen berbantuan AI.</p>
+                    </div>
+                </div>
+                <div class="timeline-item flex gap-6 mb-10 reveal">
+                    <div class="flex-shrink-0 mt-1.5 hidden sm:block"><div class="timeline-dot"></div></div>
+                    <div class="bg-gradient-to-r from-purple-50 to-white rounded-2xl p-6 border border-purple-100 flex-1 card-hover">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">Minggu 6</span>
+                            <h4 class="font-bold text-navy-900">Future Learning</h4>
+                        </div>
+                        <p class="text-slate-500 text-sm">Pengenalan coding dan computational thinking untuk sekolah dasar beserta contoh penerapannya.</p>
+                    </div>
+                </div>
+                <div class="timeline-item flex gap-6 mb-10 reveal">
+                    <div class="flex-shrink-0 mt-1.5 hidden sm:block"><div class="timeline-dot"></div></div>
+                    <div class="bg-gradient-to-r from-amber-50 to-white rounded-2xl p-6 border border-amber-100 flex-1 card-hover">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">Minggu 7</span>
+                            <h4 class="font-bold text-navy-900">Pengembangan Produk</h4>
+                        </div>
+                        <p class="text-slate-500 text-sm">Guru mengembangkan dan menyempurnakan produk pembelajaran digital secara mandiri dengan pendampingan.</p>
+                    </div>
+                </div>
+                <div class="timeline-item flex gap-6 reveal">
+                    <div class="flex-shrink-0 mt-1.5 hidden sm:block"><div class="timeline-dot"></div></div>
+                    <div class="bg-gradient-to-r from-pink-50 to-white rounded-2xl p-6 border border-pink-100 flex-1 card-hover">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-pink-100 text-pink-700 text-xs font-bold px-3 py-1 rounded-full">Minggu 8</span>
+                            <h4 class="font-bold text-navy-900">Presentasi & Evaluasi</h4>
+                        </div>
+                        <p class="text-slate-500 text-sm">Presentasi produk digital, evaluasi program, dan refleksi bersama untuk keberlanjutan pengembangan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 7 — CODING & CT ========== -->
+<section id="coding" class="py-24 lg:py-32 section-alt">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-purple-50 text-purple-600 text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="code-2" class="w-3.5 h-3.5"></i>
+                CODING & CT
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight">
+                Mengenal Coding<br><span class="gradient-text-purple">Sejak Sekolah Dasar</span>
+            </h2>
+            <p class="text-slate-500 mt-6 max-w-2xl mx-auto">Guru diperkenalkan pada konsep coding dan computational thinking dengan pendekatan yang ramah dan tidak terlalu teknis.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="reveal reveal-delay-1 ct-card bg-white rounded-2xl p-7 card-hover border border-slate-100 shadow-sm">
+                <div class="ct-number">01</div>
+                <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4"><i data-lucide="scissors" class="w-6 h-6 text-blue-600"></i></div>
+                <h3 class="text-lg font-bold text-navy-900 mb-2">Decomposition</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Memecah masalah menjadi bagian-bagian kecil yang lebih mudah dikelola.</p>
+            </div>
+            <div class="reveal reveal-delay-2 ct-card bg-white rounded-2xl p-7 card-hover border border-slate-100 shadow-sm">
+                <div class="ct-number">02</div>
+                <div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center mb-4"><i data-lucide="scan-eye" class="w-6 h-6 text-cyan-600"></i></div>
+                <h3 class="text-lg font-bold text-navy-900 mb-2">Pattern Recognition</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Mengenali pola atau kesamaan dari permasalahan yang ada.</p>
+            </div>
+            <div class="reveal reveal-delay-3 ct-card bg-white rounded-2xl p-7 card-hover border border-slate-100 shadow-sm">
+                <div class="ct-number">03</div>
+                <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-4"><i data-lucide="filter" class="w-6 h-6 text-purple-600"></i></div>
+                <h3 class="text-lg font-bold text-navy-900 mb-2">Abstraction</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Mengambil bagian penting dari suatu masalah dan mengabaikan yang tidak relevan.</p>
+            </div>
+            <div class="reveal reveal-delay-4 ct-card bg-white rounded-2xl p-7 card-hover border border-slate-100 shadow-sm">
+                <div class="ct-number">04</div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4"><i data-lucide="list-ordered" class="w-6 h-6 text-emerald-600"></i></div>
+                <h3 class="text-lg font-bold text-navy-900 mb-2">Algorithm</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Menyusun langkah penyelesaian masalah secara sistematis dan berurutan.</p>
+            </div>
+        </div>
+        <div class="reveal bg-white rounded-3xl p-8 lg:p-10 border border-slate-100 shadow-sm max-w-3xl mx-auto">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center"><i data-lucide="blocks" class="w-5 h-5 text-white"></i></div>
+                <div>
+                    <h3 class="text-lg font-bold text-navy-900">Block-Based Coding</h3>
+                    <p class="text-xs text-slate-400">Contoh visual coding ramah anak</p>
+                </div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl p-6 font-mono text-sm space-y-2">
+                <div class="inline-flex items-center gap-2 bg-amber-400 text-amber-900 px-4 py-2 rounded-lg font-bold text-xs"><i data-lucide="flag" class="w-3.5 h-3.5"></i> Ketika diklik</div>
+                <div class="ml-6 flex flex-col gap-2">
+                    <div class="inline-flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg font-bold text-xs w-fit"><i data-lucide="move" class="w-3.5 h-3.5"></i> Bergerak 10 langkah</div>
+                    <div class="inline-flex items-center gap-2 bg-purple-500 text-white px-4 py-2 rounded-lg font-bold text-xs w-fit"><i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Putar 90°</div>
+                    <div class="inline-flex items-center gap-2 bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold text-xs w-fit"><i data-lucide="repeat" class="w-3.5 h-3.5"></i> Ulangi 4 kali</div>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-red-400 text-red-900 px-4 py-2 rounded-lg font-bold text-xs"><i data-lucide="square" class="w-3.5 h-3.5"></i> Berhenti</div>
+            </div>
+            <p class="text-slate-400 text-xs mt-4 text-center">Visualisasi konsep block-based coding yang diperkenalkan kepada guru</p>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 8 — TARGET & LUARAN ========== -->
+<section id="luaran" class="py-24 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="bullseye" class="w-3.5 h-3.5"></i>
+                TARGET & LUARAN
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight">
+                Dari Pelatihan Menjadi<br><span class="gradient-text">Karya Nyata</span>
+            </h2>
+        </div>
+        <div class="reveal max-w-4xl mx-auto mb-16">
+            <div class="bg-gradient-to-br from-blue-50 via-white to-cyan-50 rounded-3xl p-8 lg:p-10 border border-blue-100">
+                <h3 class="text-xl font-bold text-navy-900 mb-6 flex items-center gap-2">
+                    <i data-lucide="target" class="w-5 h-5 text-brand-blue"></i> Target Program
+                </h3>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-brand-blue"></i></div><p class="text-slate-600 text-sm">Guru mengenal berbagai aplikasi dan website pembelajaran.</p></div>
+                    <div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-brand-blue"></i></div><p class="text-slate-600 text-sm">Guru mampu menggunakan beberapa platform digital secara mandiri.</p></div>
+                    <div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-brand-blue"></i></div><p class="text-slate-600 text-sm">Guru menghasilkan minimal satu produk pembelajaran digital.</p></div>
+                    <div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-brand-blue"></i></div><p class="text-slate-600 text-sm">Guru memahami konsep dasar coding.</p></div>
+                    <div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-brand-blue"></i></div><p class="text-slate-600 text-sm">Guru memahami computational thinking.</p></div>
+                    <div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-brand-blue"></i></div><p class="text-slate-600 text-sm">Guru mengetahui contoh penerapan coding untuk SD.</p></div>
+                    <div class="flex items-start gap-3 sm:col-span-2"><div class="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-brand-blue"></i></div><p class="text-slate-600 text-sm">Guru memiliki kesiapan untuk mengembangkan pembelajaran berbasis teknologi secara berkelanjutan.</p></div>
+                </div>
+            </div>
+        </div>
+        <div class="reveal">
+            <h3 class="text-2xl font-bold text-navy-900 text-center mb-8">Luaran Program</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="image" class="w-8 h-8"></i><span class="text-xs font-semibold">Media Digital</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="clipboard-list" class="w-8 h-8"></i><span class="text-xs font-semibold">Kuis & Asesmen</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="book-open" class="w-8 h-8"></i><span class="text-xs font-semibold">Bahan Ajar Digital</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="code-2" class="w-8 h-8"></i><span class="text-xs font-semibold">Aktivitas Coding</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="file-text" class="w-8 h-8"></i><span class="text-xs font-semibold">Modul/Panduan</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="camera" class="w-8 h-8"></i><span class="text-xs font-semibold">Dokumentasi</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="video" class="w-8 h-8"></i><span class="text-xs font-semibold">Video</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+                <div class="output-card rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[140px] bg-white" onclick="handleUpload(this)"><div class="upload-zone flex flex-col items-center gap-2 text-slate-400"><i data-lucide="award" class="w-8 h-8"></i><span class="text-xs font-semibold">Sertifikat</span><span class="text-[10px] text-slate-300">Klik untuk menambahkan</span></div><input type="file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 9 — MANFAAT ========== -->
+<section id="manfaat" class="py-24 lg:py-32 section-alt">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="heart-handshake" class="w-3.5 h-3.5"></i>
+                MANFAAT
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight">
+                Dampak untuk Guru,<br><span class="gradient-text">Sekolah, dan Peserta Didik</span>
+            </h2>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-8">
+            <div class="reveal reveal-delay-1 bg-white rounded-3xl p-8 lg:p-10 card-hover border border-slate-100 shadow-sm">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/25"><i data-lucide="user-check" class="w-8 h-8 text-white"></i></div>
+                <h3 class="text-2xl font-bold text-navy-900 mb-6">Guru</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-blue-600"></i></div><span class="text-slate-600 text-sm">Kompetensi digital meningkat.</span></li>
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-blue-600"></i></div><span class="text-slate-600 text-sm">Wawasan teknologi pembelajaran bertambah.</span></li>
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-blue-600"></i></div><span class="text-slate-600 text-sm">Memiliki pengalaman praktik aplikasi pendidikan.</span></li>
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-blue-600"></i></div><span class="text-slate-600 text-sm">Memahami dasar coding dan computational thinking.</span></li>
+                </ul>
+            </div>
+            <div class="reveal reveal-delay-2 bg-white rounded-3xl p-8 lg:p-10 card-hover border border-slate-100 shadow-sm">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/25"><i data-lucide="school" class="w-8 h-8 text-white"></i></div>
+                <h3 class="text-2xl font-bold text-navy-900 mb-6">Sekolah</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-cyan-600"></i></div><span class="text-slate-600 text-sm">Mendorong budaya pembelajaran berbasis teknologi.</span></li>
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-cyan-600"></i></div><span class="text-slate-600 text-sm">Meningkatkan inovasi pembelajaran.</span></li>
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-cyan-600"></i></div><span class="text-slate-600 text-sm">Memperkuat kesiapan menghadapi perkembangan pendidikan digital.</span></li>
+                </ul>
+            </div>
+            <div class="reveal reveal-delay-3 bg-white rounded-3xl p-8 lg:p-10 card-hover border border-slate-100 shadow-sm">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6 shadow-lg shadow-purple-500/25"><i data-lucide="users" class="w-8 h-8 text-white"></i></div>
+                <h3 class="text-2xl font-bold text-navy-900 mb-6">Peserta Didik</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-purple-600"></i></div><span class="text-slate-600 text-sm">Pengalaman belajar lebih interaktif.</span></li>
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-purple-600"></i></div><span class="text-slate-600 text-sm">Pembelajaran memanfaatkan teknologi secara tepat guna.</span></li>
+                    <li class="flex items-start gap-3"><div class="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-purple-600"></i></div><span class="text-slate-600 text-sm">Berpotensi mengenal coding dan computational thinking sejak dini.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 10 — CTA ========== -->
+<section class="cta-bg py-24 lg:py-32 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 text-brand-cyan text-xs font-semibold px-4 py-2 rounded-full mb-8">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> MULAI SEKARANG
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
+            Mari Bersama Mewujudkan<br>Pembelajaran yang Lebih Cerdas
+        </h2>
+        <p class="text-white/60 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+            Teknologi bukan sekadar alat. Dengan guru yang siap, kreatif, dan adaptif, teknologi dapat menjadi bagian dari pembelajaran yang bermakna bagi generasi masa depan.
+        </p>
+        <a href="#tentang" class="inline-flex items-center gap-2 bg-gradient-to-r from-brand-blue to-brand-cyan text-white font-semibold px-10 py-4 rounded-full hover:shadow-xl hover:shadow-brand-blue/30 transition-all duration-300 hover:scale-105 text-base">
+            Jelajahi Program <i data-lucide="arrow-up" class="w-5 h-5"></i>
+        </a>
+    </div>
+</section>
+
+<!-- ========== SECTION 11 — TIM PENYUSUN (UPDATED) ========== -->
+<section id="tim" class="py-24 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Judul -->
+        <div class="text-center mb-4 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                TIM PENYUSUN
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-900 leading-tight">
+                Tim <span class="gradient-text">Penyusun</span>
+            </h2>
+        </div>
+        <p class="text-center text-slate-500 max-w-2xl mx-auto mb-16 reveal text-sm sm:text-base leading-relaxed">
+            Program Sekolah Cerdas Digital disusun oleh tim yang berkomitmen menghadirkan inovasi pembelajaran berbasis teknologi untuk pendidikan sekolah dasar.
+        </p>
+
+        <!-- Kartu Profil -->
+        <div class="grid sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <!-- Asriani -->
+            <div class="reveal reveal-delay-1 team-card bg-gradient-to-b from-white to-slate-50/80 rounded-3xl p-8 text-center card-hover border border-slate-100 shadow-sm">
+                <div class="flex justify-center mb-6">
+                    <div class="team-photo-ring">
+                        <img
+                            src="https://z-cdn-media.chatglm.cn/files/922e1f8a-f899-4c2d-ac9c-4f7baba2564a.jpeg?auth_key=1887476787-4e8d1174cb194c739fe8da63f1995417-0-5168721022b81db7f88a9e429c4ad986"
+                            alt="Asriani"
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-navy-900 mb-1">Asriani</h3>
+                <p class="text-brand-blue text-sm font-medium">Penyusun / Tim Pelaksana</p>
+            </div>
+
+            <!-- Fahria Hamaya -->
+            <div class="reveal reveal-delay-2 team-card bg-gradient-to-b from-white to-slate-50/80 rounded-3xl p-8 text-center card-hover border border-slate-100 shadow-sm">
+                <div class="flex justify-center mb-6">
+                    <div class="team-photo-ring">
+                        <img
+                            src="https://z-cdn-media.chatglm.cn/files/7411e186-fd3f-4901-a77e-8a671dec2042.jpeg?auth_key=1887476787-1b166770d850461faf09a45d1d46f6f7-0-af1fbc79b4e9803b6af9b8086493578e"
+                            alt="Fahria Hamaya"
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-navy-900 mb-1">Fahria Hamaya</h3>
+                <p class="text-brand-blue text-sm font-medium">Penyusun / Tim Pelaksana</p>
+            </div>
+
+            <!-- Nurasni S Malagapi -->
+            <div class="reveal reveal-delay-3 team-card bg-gradient-to-b from-white to-slate-50/80 rounded-3xl p-8 text-center card-hover border border-slate-100 shadow-sm">
+                <div class="flex justify-center mb-6">
+                    <div class="team-photo-ring">
+                        <img
+                            src="https://z-cdn-media.chatglm.cn/files/98fbb7e4-2ab3-466b-838d-099db03a2fc2.jpeg?auth_key=1887476787-36dc0c93b2494be3bc8d59ee73c4b921-0-db549c71ee0aefdc73b11d3e952cbcdc"
+                            alt="Nurasni S Malagapi"
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-navy-900 mb-1">Nurasni S Malagapi</h3>
+                <p class="text-brand-blue text-sm font-medium">Penyusun / Tim Pelaksana</p>
+            </div>
+        </div>
+
+        <!-- Informasi Institusi -->
+        <div class="reveal mt-16 text-center">
+            <div class="inline-block bg-gradient-to-br from-blue-50 via-white to-purple-50 rounded-2xl px-10 py-8 border border-slate-100 shadow-sm">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-blue to-brand-cyan flex items-center justify-center">
+                        <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+                    </div>
+                </div>
+                <p class="text-navy-900 font-bold text-base mb-1">Program Studi Pendidikan Guru Sekolah Dasar</p>
+                <p class="text-slate-600 text-sm mb-1">Pendidikan Profesi Guru — Universitas Khairun</p>
+                <p class="text-slate-500 text-sm">Ternate — 2026</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section id="faq" class="py-24 lg:py-32 section-alt">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-brand-blue text-xs font-semibold px-4 py-2 rounded-full mb-6">
+                <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+                FAQ
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-navy-900 leading-tight">
+                Pertanyaan yang <span class="gradient-text">Sering Diajukan</span>
+            </h2>
+        </div>
+        <div class="space-y-4 reveal">
+            <div class="faq-item bg-white">
+                <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-navy-900 text-sm pr-4">Apa itu Sekolah Cerdas Digital?</span>
+                    <div class="faq-icon w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4 text-brand-blue"></i></div>
+                </button>
+                <div class="faq-answer px-6"><p class="text-slate-500 text-sm leading-relaxed pb-6">Program penguatan kompetensi digital guru melalui pemanfaatan teknologi pembelajaran serta pengenalan coding dan computational thinking.</p></div>
+            </div>
+            <div class="faq-item bg-white">
+                <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-navy-900 text-sm pr-4">Siapa sasaran program?</span>
+                    <div class="faq-icon w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4 text-brand-blue"></i></div>
+                </button>
+                <div class="faq-answer px-6"><p class="text-slate-500 text-sm leading-relaxed pb-6">Guru SD Negeri 49 Kota Ternate.</p></div>
+            </div>
+            <div class="faq-item bg-white">
+                <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-navy-900 text-sm pr-4">Berapa lama program berlangsung?</span>
+                    <div class="faq-icon w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4 text-brand-blue"></i></div>
+                </button>
+                <div class="faq-answer px-6"><p class="text-slate-500 text-sm leading-relaxed pb-6">8 minggu atau 2 bulan.</p></div>
+            </div>
+            <div class="faq-item bg-white">
+                <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-navy-900 text-sm pr-4">Apakah program hanya membahas aplikasi digital?</span>
+                    <div class="faq-icon w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4 text-brand-blue"></i></div>
+                </button>
+                <div class="faq-answer px-6"><p class="text-slate-500 text-sm leading-relaxed pb-6">Tidak. Program juga mencakup praktik pembuatan produk digital serta pengenalan coding dan computational thinking.</p></div>
+            </div>
+            <div class="faq-item bg-white">
+                <button class="faq-btn w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-navy-900 text-sm pr-4">Apa produk yang dihasilkan?</span>
+                    <div class="faq-icon w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4 text-brand-blue"></i></div>
+                </button>
+                <div class="faq-answer px-6"><p class="text-slate-500 text-sm leading-relaxed pb-6">Media pembelajaran digital, kuis/asesmen digital, bahan ajar digital, dan contoh aktivitas coding sederhana.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SECTION 12 — FOOTER ========== -->
+<footer class="bg-navy-900 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-3 gap-12 mb-12">
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-blue to-brand-cyan flex items-center justify-center"><i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i></div>
+                    <span class="text-white font-bold text-lg">Sekolah Cerdas Digital</span>
+                </div>
+                <p class="text-white/50 text-sm italic mb-6">"Cerdas Gurunya, Digital Pembelajarannya, Siap Generasinya."</p>
+                <div class="flex items-center gap-2 text-white/40 text-sm">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-brand-cyan"></i>
+                    <span>Mitra: SD Negeri 49 Kota Ternate</span>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold text-sm mb-4">Navigasi</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="#tentang" class="text-white/50 text-sm hover:text-brand-cyan transition-colors">Tentang</a>
+                    <a href="#luaran" class="text-white/50 text-sm hover:text-brand-cyan transition-colors">Luaran</a>
+                    <a href="#fokus" class="text-white/50 text-sm hover:text-brand-cyan transition-colors">Fokus Program</a>
+                    <a href="#manfaat" class="text-white/50 text-sm hover:text-brand-cyan transition-colors">Manfaat</a>
+                    <a href="#tahapan" class="text-white/50 text-sm hover:text-brand-cyan transition-colors">Tahapan</a>
+                    <a href="#tim" class="text-white/50 text-sm hover:text-brand-cyan transition-colors">Profil Penyusun</a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold text-sm mb-4">Pelaksana</h4>
+                <div class="text-white/50 text-sm space-y-2">
+                    <p>Program Studi Pendidikan Guru Sekolah Dasar</p>
+                    <p>Pendidikan Profesi Guru</p>
+                    <p>Universitas Khairun</p>
+                    <p>Ternate — 2026</p>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-white/30 text-xs">© 2026 Sekolah Cerdas Digital. Proyek Kepemimpinan PPG CAGUR.</p>
+            <div class="flex items-center gap-1 text-white/30 text-xs">
+                <span>Dibuat dengan</span>
+                <i data-lucide="heart" class="w-3 h-3 text-red-400"></i>
+                <span>oleh Tim Penyusun</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ========== BACK TO TOP ========== -->
+<button id="backToTop" class="back-to-top fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-gradient-to-br from-brand-blue to-brand-cyan text-white shadow-lg shadow-brand-blue/30 flex items-center justify-center hover:scale-110 transition-all duration-300">
+    <i data-lucide="arrow-up" class="w-5 h-5"></i>
+</button>
+
+<!-- ========== TOAST ========== -->
+<div id="toast" class="fixed bottom-20 right-6 z-50 bg-navy-900 text-white text-sm px-5 py-3 rounded-xl shadow-2xl flex items-center gap-2 transition-all duration-500 translate-y-4 opacity-0 pointer-events-none">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMsg">File berhasil ditambahkan</span>
+</div>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+    lucide.createIcons();
+
+    // Hero Particles
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() { canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    class Particle {
+        constructor() { this.reset(); }
+        reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.5; this.speedX = (Math.random() - 0.5) * 0.5; this.speedY = (Math.random() - 0.5) * 0.5; this.opacity = Math.random() * 0.5 + 0.1; }
+        update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset(); }
+        draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(6, 182, 212, ${this.opacity})`; ctx.fill(); }
+    }
+    function initParticles() { const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000)); particles = []; for (let i = 0; i < count; i++) particles.push(new Particle()); }
+    initParticles();
+    function drawLines() { for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const dx = particles[i].x - particles[j].x; const dy = particles[i].y - particles[j].y; const dist = Math.sqrt(dx * dx + dy * dy); if (dist < 150) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = `rgba(6, 182, 212, ${0.08 * (1 - dist / 150)})`; ctx.lineWidth = 0.5; ctx.stroke(); } } } }
+    function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); drawLines(); requestAnimationFrame(animateParticles); }
+    animateParticles();
+
+    // Sticky Nav
+    const navbar = document.getElementById('navbar');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 80) navbar.classList.add('nav-scrolled'); else navbar.classList.remove('nav-scrolled');
+        let current = '';
+        sections.forEach(section => { if (window.scrollY >= section.offsetTop - 120) current = section.getAttribute('id'); });
+        navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href') === '#' + current) link.classList.add('active'); });
+        const btt = document.getElementById('backToTop');
+        if (window.scrollY > 600) btt.classList.add('show'); else btt.classList.remove('show');
+    });
+    document.getElementById('backToTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Mobile Menu
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    function openMobileMenu() { mobileMenu.classList.add('open'); mobileOverlay.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+    function closeMobileMenu() { mobileMenu.classList.remove('open'); mobileOverlay.classList.add('hidden'); document.body.style.overflow = ''; }
+    document.getElementById('mobileMenuBtn').addEventListener('click', openMobileMenu);
+    document.getElementById('mobileMenuClose').addEventListener('click', closeMobileMenu);
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', closeMobileMenu));
+
+    // Scroll Reveal
+    const revealObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Counter Animation
+    const counterObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { const counter = entry.target; const target = parseInt(counter.getAttribute('data-target')); const duration = 2000; const start = performance.now(); function updateCounter(now) { const elapsed = now - start; const progress = Math.min(elapsed / duration, 1); const eased = 1 - Math.pow(1 - progress, 3); counter.textContent = Math.round(eased * target); if (progress < 1) requestAnimationFrame(updateCounter); } requestAnimationFrame(updateCounter); counterObserver.unobserve(counter); } }); }, { threshold: 0.5 });
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    // FAQ
+    function toggleFaq(btn) { const item = btn.parentElement; const isActive = item.classList.contains('active'); document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active')); if (!isActive) item.classList.add('active'); }
+
+    // File Upload
+    function handleUpload(card) { const input = card.querySelector('input[type="file"]'); input.click(); input.onchange = function() { if (this.files && this.files[0]) { const fileName = this.files[0].name; const zone = card.querySelector('.upload-zone'); if (this.files[0].type.startsWith('image/')) { const reader = new FileReader(); reader.onload = function(e) { zone.innerHTML = `<img src="${e.target.result}" class="w-full h-20 object-cover rounded-lg mb-2" alt="${fileName}"><span class="text-xs font-semibold text-slate-700 truncate max-w-full block">${fileName}</span><span class="text-[10px] text-slate-400">Klik untuk mengganti</span>`; }; reader.readAsDataURL(this.files[0]); } else { zone.innerHTML = `<i data-lucide="file-check" class="w-8 h-8 text-emerald-500"></i><span class="text-xs font-semibold text-slate-700 truncate max-w-full block">${fileName}</span><span class="text-[10px] text-slate-400">Klik untuk mengganti</span>`; lucide.createIcons(); } showToast('File "' + fileName + '" berhasil ditambahkan'); } }; }
+
+    // Toast
+    function showToast(msg) { const toast = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; toast.classList.remove('translate-y-4', 'opacity-0', 'pointer-events-none'); toast.classList.add('translate-y-0', 'opacity-100'); setTimeout(() => { toast.classList.add('translate-y-4', 'opacity-0', 'pointer-events-none'); toast.classList.remove('translate-y-0', 'opacity-100'); }, 3000); }
+
+    setTimeout(() => lucide.createIcons(), 100);
+</script>
+
+</body>
+</html>
